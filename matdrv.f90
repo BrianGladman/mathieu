@@ -1,9 +1,16 @@
 
+module param
+    integer, parameter :: knd = selected_real_kind(8)
+    logical, parameter :: debug = .true.
+    logical, parameter :: warn = .true.
+    logical, parameter :: output = .true.
+end module param
+
 program main
     use param
     use mathieu
     implicit none
-    integer   ndec, i, j, k, l, nex, kindd, kindq, icq, isq, minacc, narg, & 
+    integer   ndec, i, j, k, l, nex, kindd, kindq, icq, isq, minacc, narg, &
               lnum, izxi, ioprad, iopang, max, maxd, maxj, maxk, maxn, maxp, &
               maxterm, maxbp, maxkbp, maxlp, ismax
     real(knd) cm, q, arg1, darg, r, x1, z, xi
@@ -33,9 +40,6 @@ program main
     open(1, file='matfcn.dat')
     open(20 ,file='fort.20')
     open(30, file='fort.30')
-    open(40, file='fort.40')
-    open(50, file='fort.50')
-    open(60, file='fort.60')
 
     read(1, *) lnum, ioprad, iopang, izxi, icq, isq
 
@@ -81,7 +85,7 @@ program main
     maxn = maxj
     maxk = 1
     maxkbp = 1
-    
+
     if (ioprad /= 0 .and. isq /= 1 .and. x1 /= 0.0e0_knd) then
         maxkbp = lnum + 4 * ndec + int(cm) + 103
         if(minacc > ndec - 2 .or. (minacc > ndec - 4 .and. cm >  5.0e0_knd) &
@@ -161,9 +165,9 @@ program main
     end if
 
     call matfcn(lnum, ioprad, izxi, icq, isq, cm, r, iopang, narg, arg, &
-                  mc1c, mc1e, mc1dc, mc1de, mc23c, mc23e, mc23dc, mc23de, &
-                  ms1c, ms1e, ms1dc, ms1de, ms23c, ms23e, ms23dc, ms23de, &
-		          ce, ced, se, sed, acc_rc, acc_rs, acc_acs)
+                mc1c, mc1e, mc1dc, mc1de, mc23c, mc23e, mc23dc, mc23de, acc_rc, &
+                ms1c, ms1e, ms1dc, ms1de, ms23c, ms23e, ms23dc, ms23de, acc_rs, &
+                ce, ced, se, sed, acc_acs)
 
     do i = 1, lnum
         l = i - 1
@@ -198,9 +202,6 @@ program main
     deallocate (mc1e,mc1de,mc23e,mc23de,ms1e,ms1de,ms23e,ms23de)
     deallocate (ce,ced,se,sed)
     deallocate (acc_rc, acc_rs, acc_acs)
-    close(60)
-    close(50)
-    close(40)
     close(30)
     close(20)
     close(1)

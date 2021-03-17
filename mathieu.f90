@@ -1,12 +1,5 @@
 ! version 1.07 January 2021
 
-module param
-    integer, parameter :: knd = selected_real_kind(8)
-    logical, parameter :: debug = .true.
-    logical, parameter :: warn = .true.
-    logical, parameter :: output = .false.
-end module param
-
 module mathieu
     use param
 
@@ -15,9 +8,9 @@ module mathieu
     contains
 
     subroutine matfcn(lnum, ioprad, izxi, icq, isq, qc, r, iopang, narg, arg, &
-                            mc1c, mc1e, mc1dc, mc1de, mc23c, mc23e, mc23dc, mc23de, &
-                            ms1c, ms1e, ms1dc, ms1de, ms23c, ms23e, ms23dc, ms23de, &
-                            ce, ced, se, sed, naccrc, naccrs, naccra)
+                            mc1c, mc1e, mc1dc, mc1de, mc23c, mc23e, mc23dc, mc23de, naccrc, &
+                            ms1c, ms1e, ms1dc, ms1de, ms23c, ms23e, ms23dc, ms23de, naccrs, &
+			    ce, ced, se, sed, naccra)
 
     integer, intent (in)    ::  ioprad, izxi, icq, isq, iopang, narg
     real(knd), intent (in)  ::  qc, r, arg(narg)
@@ -44,7 +37,7 @@ module mathieu
 !  computers with values for kindd and kindq different than 8 and 16,
 !  respectively.
 !
-        kindd=8
+5       kindd=8
         kindq=16
 
 !  set the minimum desired accuray minacc to 10 for real*8
@@ -127,18 +120,18 @@ module mathieu
         call mathieuf(lnum,cm,q,icq,isq,ioprad,iopang,minacc,izxi,x1,z, &
                    narg,arg,maxd,maxj,maxlp,maxn,maxp,maxkbp,maxk, &
                    ndec,nex,ngau,kindd,kindq, &
-		   mc1c,mc1e,mc1dc,mc1de,mc23c,mc23e,mc23dc,mc23de, &
+		   mc1c,mc1e,mc1dc,mc1de,mc23c,mc23e,mc23dc,mc23de,naccrc, &
 		   ms1c,ms1e,ms1dc,ms1de,ms23c,ms23e,ms23dc,ms23de, &
-		   ce,ced,se,sed,naccrc,naccrs,naccra)
+		   naccrs,ce,ced,se,sed,naccra)
         end subroutine
 !
 
         subroutine mathieuf(lnum,cm,q,icq,isq,ioprad,iopang,minacc,izxi,x1, &
                             z,narg,arg,maxd,maxj,maxlp,maxn,maxp,maxkbp, &
                             maxk,ndec,nex,ngau,kindd,kindq, &
-			    amc1c,mc1e,amc1dc,mc1de,amc23c,mc23e,amc23dc,mc23de, &
+			    amc1c,mc1e,amc1dc,mc1de,amc23c,mc23e,amc23dc,mc23de,narc, &
 			    ams1c,ms1e,ams1dc,ms1de,ams23c,ms23e,ams23dc,ms23de, &
-                            ace,aced,ase,ased,narc,nars,naa)
+                            nars,ace,aced,ase,ased,naa)
 
         use param
 !
@@ -165,7 +158,7 @@ module mathieu
         real(knd) ace(lnum,narg),aced(lnum,narg),ase(lnum,narg), ased(lnum,narg)
 !
 !  integer arrays with dimensions lnum and narg
-        integer   naa(lnum,narg)            
+        integer   naa(lnum,narg)
 !
 !  real(knd) vectors with dimension maxd
         real(knd) enra(maxd),blista(maxd),glista(maxd),enrb(maxd), &
@@ -985,7 +978,7 @@ end if
               amc1dc(li)=mc1dc
               mc1e(li)=imc1e
               mc1de(li)=imc1de
-              narc(li)=naccrc            
+              narc(li)=naccrc
               if(isq.eq.1) then
               amc23c(li)=mc2c
               amc23dc(li)=mc2dc
@@ -997,7 +990,7 @@ end if
               mc23e(li)=imc3e
               mc23de(li)=imc3de
               end if
-              if(l.eq.0) nars(1)=ndec 
+              if(l.eq.0) nars(1)=ndec
               if(l.ne.0) then
                 ams1c(li)=ms1c
                 ams1dc(li)=ms1dc
