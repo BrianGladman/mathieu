@@ -17,24 +17,25 @@ module mathieu
     subroutine matfcn(lnum, ioprad, izxi, icq, isq, qc, r, iopang, narg, arg, &
                             mc1c, mc1e, mc1dc, mc1de, mc23c, mc23e, mc23dc, mc23de, &
                             ms1c, ms1e, ms1dc, ms1de, ms23c, ms23e, ms23dc, ms23de, &
-                            ce, ced, se, sed, acc_rc, acc_rs, acc_acs)
+                            ce, ced, se, sed, naccrc, naccrs, naccra)
 
     integer, intent (in)    ::  ioprad, izxi, icq, isq, iopang, narg
     real(knd), intent (in)  ::  qc, r
     integer, intent (out)   ::  mc1e(lnum),mc1de(lnum),mc23e(lnum),mc23de(lnum), &
                                 ms1e(lnum),ms1de(lnum),ms23e(lnum),ms23de(lnum), &
-                                acc_rc(lnum), acc_rs(lnum), acc_acs(lnum, narg)
+                                naccrc(lnum), naccrs(lnum), naccra(lnum, narg)
     real(knd), intent (out) ::  mc1c(lnum), mc1dc(lnum), mc23c(lnum), mc23dc(lnum), &
                                 ms1c(lnum), ms1dc(lnum), ms23c(lnum), ms23dc(lnum), &
                                 ce(lnum, narg), ced(lnum, narg), arg(narg), &
                                 se(lnum, narg), sed(lnum, narg)
-    real(knd) q, cm, z, x1, xi
-
-!  ndec: the maximum number of decimal digits available in real(knd) arithmetic.
+    real(knd) q, cm, z, x1
+!
+!  ndec: the maximum number of decimal digits available in real(knd)
+!           arithmetic.
 !  nex:  the maximum exponent available in real(knd) arithmetic.
-
+!
         ndec=precision(cm)
-        nex=range(cm) - 1
+        nex=range(cm)-1
 !
 !  Here is where the user sets kindd, the number of bytes available
 !  in double precision data for the computer that coblfcn is run on.
@@ -124,20 +125,20 @@ module mathieu
         ngau=200
 !
         call mathieuf(lnum,cm,q,icq,isq,ioprad,iopang,minacc,izxi,x1,z, &
-                    narg,arg,maxd,maxj,maxlp,maxn,maxp,maxkbp,maxk, &
-                    ndec,nex,ngau,kindd,kindq, &
-		            mc1c,mc1e,mc1dc,mc1de,mc23c,mc23e,mc23dc,mc23de, &
-		            ms1c,ms1e,ms1dc,ms1de,ms23c,ms23e,ms23dc,ms23de, &
-		            ce,ced,se,sed,acc_rc,acc_rs,acc_acs)
-        end subroutine 
+                   narg,arg,maxd,maxj,maxlp,maxn,maxp,maxkbp,maxk, &
+                   ndec,nex,ngau,kindd,kindq, &
+		   mc1c,mc1e,mc1dc,mc1de,mc23c,mc23e,mc23dc,mc23de, &
+		   ms1c,ms1e,ms1dc,ms1de,ms23c,ms23e,ms23dc,ms23de, &
+		   ce,ced,se,sed,naccrc,naccrs,naccra)
+        end subroutine
 !
 
         subroutine mathieuf(lnum,cm,q,icq,isq,ioprad,iopang,minacc,izxi,x1, &
                             z,narg,arg,maxd,maxj,maxlp,maxn,maxp,maxkbp, &
                             maxk,ndec,nex,ngau,kindd,kindq, &
-			                amc1c,mc1e,amc1dc,mc1de,amc23c,mc23e,amc23dc,mc23de, &
-			                ams1c,ms1e,ams1dc,ms1de,ams23c,ms23e,ams23dc,ms23de, &
-                            ace,aced,ase,ased,acc_rc, acc_rs, acc_acs)
+			    amc1c,mc1e,amc1dc,mc1de,amc23c,mc23e,amc23dc,mc23de, &
+			    ams1c,ms1e,ams1dc,ms1de,ams23c,ms23e,ams23dc,ms23de, &
+                            ace,aced,ase,ased,narc,nars,naa)
 
         use param
 !
@@ -158,14 +159,13 @@ module mathieu
 !  integer vectors with dimension lnum
         integer   mc1e(lnum),mc1de(lnum),mc23e(lnum),mc23de(lnum), &
                   ms1e(lnum),ms1de(lnum),ms23e(lnum),ms23de(lnum), &
-                  acc_rc(lnum), acc_rs(lnum)
+                  narc(lnum),nars(lnum)
 !
 !  real(knd) arrays with dimensions lnum and narg
-        real(knd) ace(lnum,narg),aced(lnum,narg),ase(lnum,narg), &
-                  ased(lnum,narg)
-        
+        real(knd) ace(lnum,narg),aced(lnum,narg),ase(lnum,narg), ased(lnum,narg)
+!
 !  integer arrays with dimensions lnum and narg
-        integer acc_acs(lnum, narg)
+        integer   naa(lnum,narg)            
 !
 !  real(knd) vectors with dimension maxd
         real(knd) enra(maxd),blista(maxd),glista(maxd),enrb(maxd), &
@@ -951,7 +951,7 @@ if (debug) then
               end if
 end if
 510         if(iopneu.eq.4) iopneu=1
-            
+            if(isq.eq.-1) go to 540
 if (output) then
             write(20,520) l,mc1c,imc1e,mc1dc,imc1de,mc2c,imc2e,mc2dc, &
                           imc2de,naccrc
@@ -982,9 +982,10 @@ if (warn) then
               end if
 end if
               amc1c(li)=mc1c
-            amc1dc(li)=mc1dc
-            mc1e(li)=imc1e
-            mc1de(li)=imc1de
+              amc1dc(li)=mc1dc
+              mc1e(li)=imc1e
+              mc1de(li)=imc1de
+              narc(li)=naccrc            
               if(isq.eq.1) then
               amc23c(li)=mc2c
               amc23dc(li)=mc2dc
@@ -996,11 +997,13 @@ end if
               mc23e(li)=imc3e
               mc23de(li)=imc3de
               end if
-                if(l.ne.0) then
+              if(l.eq.0) nars(1)=ndec 
+              if(l.ne.0) then
                 ams1c(li)=ms1c
                 ams1dc(li)=ms1dc
                 ms1e(li)=ims1e
                 ms1de(li)=ims1de
+                nars(li)=naccrs
                 if(isq.eq.1) then
                 ams23c(li)=ms2c
                 ams23dc(li)=ms2dc
@@ -1012,9 +1015,7 @@ end if
                 ms23e(li)=ims3e
                 ms23de(li)=ims3de
                 end if
-                end if
-                acc_rc(li) = naccrc
-                acc_rs(li) = naccrs
+              end if
 610         if(iopang.eq.0) go to 700
 !
 !  determine Mathieu angular functions of the first kind
@@ -1045,7 +1046,7 @@ end if
                 ase(li,jarg)=se(jarg)
                 ased(li,jarg)=sed(jarg)
                 end if
-                acc_acs(li, jarg) = nacca(jarg)
+              naa(li,jarg)=nacca(jarg)  
 620           format(1x,f20.14,5x,e24.15,2x,e24.15,2x,i2)
 630           format(1x,f20.14,5x,e24.15,2x,e24.15,2x,/,26x, &
                     e24.15,2x,e24.15,2x,i2)
