@@ -20,13 +20,13 @@ module mathieu
                             ce, ced, se, sed, naccrc, naccrs, naccra)
 
     integer, intent (in)    ::  ioprad, izxi, icq, isq, iopang, narg
-    real(knd), intent (in)  ::  qc, r
+    real(knd), intent (in)  ::  qc, r, arg(narg)
     integer, intent (out)   ::  mc1e(lnum),mc1de(lnum),mc23e(lnum),mc23de(lnum), &
                                 ms1e(lnum),ms1de(lnum),ms23e(lnum),ms23de(lnum), &
                                 naccrc(lnum), naccrs(lnum), naccra(lnum, narg)
     real(knd), intent (out) ::  mc1c(lnum), mc1dc(lnum), mc23c(lnum), mc23dc(lnum), &
                                 ms1c(lnum), ms1dc(lnum), ms23c(lnum), ms23dc(lnum), &
-                                ce(lnum, narg), ced(lnum, narg), arg(narg), &
+                                ce(lnum, narg), ced(lnum, narg), &
                                 se(lnum, narg), sed(lnum, narg)
     real(knd) q, cm, z, x1
 !
@@ -195,7 +195,7 @@ module mathieu
         real(knd) cosi(narg,maxp),sine(narg,maxp)
 !
 !  integer and real(knd) vectors with dimension narg
-        dimension nacca(narg),naccc(narg),naccs(narg)
+        dimension naccc(narg),naccs(narg)
         real(knd) arg(narg),barg(narg),ce(narg),ced(narg), &
                   se(narg),sed(narg)
 !
@@ -1028,13 +1028,13 @@ end if
                       naccs,jangc,jangs,asubl,bsubl)
             jang=max(jangc,jangs)
               do 680 jarg=1,narg
-              nacca(jarg)=min(naccc(jarg),naccs(jarg))
+              nacca=min(naccc(jarg),naccs(jarg))
 if (output) then
               if(iopang.eq.1) write(30,620) arg(jarg), &
-                             ce(jarg),se(jarg),nacca(jarg)
+                             ce(jarg),se(jarg),nacca
               if(iopang.eq.2) write(30,630) arg(jarg), &
                              ce(jarg),ced(jarg),se(jarg), &
-                             sed(jarg),nacca(jarg)
+                             sed(jarg),nacca
 end if
                 if(iopang.eq.1) then
                 ace(li,jarg)=ce(jarg)
@@ -1046,7 +1046,7 @@ end if
                 ase(li,jarg)=se(jarg)
                 ased(li,jarg)=sed(jarg)
                 end if
-              naa(li,jarg)=nacca(jarg)  
+              naa(li,jarg)=nacca
 620           format(1x,f20.14,5x,e24.15,2x,e24.15,2x,i2)
 630           format(1x,f20.14,5x,e24.15,2x,e24.15,2x,/,26x, &
                     e24.15,2x,e24.15,2x,i2)
