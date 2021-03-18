@@ -16,7 +16,7 @@ module mathieu
     real(knd), intent (in)  ::  qc, r, arg(narg)
     integer, intent (out)   ::  mc1e(lnum),mc1de(lnum),mc23e(lnum),mc23de(lnum), &
                                 ms1e(lnum),ms1de(lnum),ms23e(lnum),ms23de(lnum), &
-                                naccrc(lnum), naccrs(lnum), naccra(lnum, narg)
+                                naccrc(lnum), naccrs(lnum), nacca(lnum, narg)
     real(knd), intent (out) ::  mc1c(lnum), mc1dc(lnum), mc23c(lnum), mc23dc(lnum), &
                                 ms1c(lnum), ms1dc(lnum), ms23c(lnum), ms23dc(lnum), &
                                 ce(lnum, narg), ced(lnum, narg), &
@@ -120,17 +120,17 @@ module mathieu
         call mathieuf(lnum,cm,q,icq,isq,ioprad,iopang,minacc,izxi,x1,z, &
                    narg,arg,maxd,maxj,maxlp,maxn,maxp,maxkbp,maxk, &
                    ndec,nex,ngau,kindd,kindq, &
-		   mc1c,mc1e,mc1dc,mc1de,mc23c,mc23e,mc23dc,mc23de,naccrc, &
-		   ms1c,ms1e,ms1dc,ms1de,ms23c,ms23e,ms23dc,ms23de,naccrs, &
-		   ce,ced,se,sed,nacca)
+                   mc1c,mc1e,mc1dc,mc1de,mc23c,mc23e,mc23dc,mc23de,naccrc, &
+                   ms1c,ms1e,ms1dc,ms1de,ms23c,ms23e,ms23dc,ms23de,naccrs, &
+                   ce,ced,se,sed,nacca)
         end subroutine
 !
 
         subroutine mathieuf(lnum,cm,q,icq,isq,ioprad,iopang,minacc,izxi,x1, &
                             z,narg,arg,maxd,maxj,maxlp,maxn,maxp,maxkbp, &
                             maxk,ndec,nex,ngau,kindd,kindq, &
-			    amc1c,mc1e,amc1dc,mc1de,amc23c,mc23e,amc23dc,mc23de,narc, &
-			    ams1c,ms1e,ams1dc,ms1de,ams23c,ms23e,ams23dc,ms23de, &
+                            amc1c,mc1e,amc1dc,mc1de,amc23c,mc23e,amc23dc,mc23de,narc, &
+                            ams1c,ms1e,ams1dc,ms1de,ams23c,ms23e,ams23dc,ms23de, &
                             nars,ace,aced,ase,ased,naa)
 
         use param
@@ -784,7 +784,7 @@ if (debug) then
                      5x,'ms2d = ',f33.30,i6)
 end if
               go to 400
-	      end if
+          end if
 350         continue
 if (debug) then
               if(knd.eq.kindd) then
@@ -1112,10 +1112,10 @@ end if
 !                        the desired angles
 !               sed    : corresponding vector for first derivatives
 !                        of the sine angular functions
-!               naccs  : vector of dimension narg containing estimates
-!                        of the minimum accuracy in decimal digits of
-!                        the se and sed function values for each angle
 !               naccc  : vector of dimension narg containing estimates
+!                        of the minimum accuracy in decimal digits of
+!                        the ce and ced function values for each angle
+!               naccs  : vector of dimension narg containing estimates
 !                        of the minimum accuracy in decimal digits of
 !                        the se and sed function values for each angle
 !               jangc  : largest number of terms taken for ce
@@ -1679,7 +1679,7 @@ end if
         if(iflagd.eq.0.or.l.ne.1) go to 120
         m1tempd=m1temp-1.0e0_knd
         m1dtempd=m1dtemp-1.0e0_knd
-120	continue
+120 continue
 !
 !  backward summation of numerator series for m1
         if (l2.lt.jlim) go to 175
@@ -1782,7 +1782,7 @@ end if
         if(abs(m1c).ge.1.0e0_knd.or.m1c.eq.0.0e0_knd) go to 250
         m1c=m1c*10.0e0_knd
         im1e=im1e-1
-250	continue
+250 continue
         if(x1.eq.0.0e0_knd) go to 270
         if(iflagd.eq.1) m1temp=m1tempd
         if(iflagd.eq.1) m1dtemp=m1dtempd
@@ -2226,7 +2226,7 @@ end if
         if(abs(m1c).ge.1.0e0_knd) go to 170
         m1c=m1c*10.0e0_knd
         im1e=im1e-1
-170	continue
+170 continue
         m1c=-m1c
         if(iopt.eq.10) m1c=-m1c
         if(ix.eq.1) m1c=-m1c
@@ -2511,7 +2511,7 @@ end if
         if(abs(m1c).ge.1.0e0_knd) go to 150
         m1c=m1c*10.0e0_knd
         im1e=im1e-1
-150	continue
+150 continue
         m1c=-m1c
         if(iopt.eq.10) m1c=-m1c
         if(ix.eq.1) m1c=-m1c
@@ -2975,7 +2975,7 @@ end if
         if(abs(m2c).ge.1.0e0_knd) go to 200
         m2c=m2c*10.0e0_knd
         im2e=im2e-1
-200	continue
+200 continue
         iterm=log10(abs(m2dtemp))
         m2dtemp=m2dtemp*10.0e0_knd**(-iterm)
         m2dc=m2dtemp*coef/den
@@ -3266,7 +3266,7 @@ end if
         if(abs(m3c).ge.1.0e0_knd) go to 120
         m3c=m3c*10.0e0_knd
         im3e=im3e-1
-120	continue
+120 continue
         iterm=log10(abs(m3dtemp))
         m3dtemp=m3dtemp*10.0e0_knd**(-iterm)
         m3dc=2.0e0_knd*m3dtemp*cbesn(l2+1)*cneun(l2+1)/(m3bot*pi)
@@ -3495,7 +3495,7 @@ end if
         if(abs(m3c).ge.1.0e0_knd) go to 160
         m3c=m3c*10.0e0_knd
         im3e=im3e-1
-160	continue
+160 continue
         m3dtemp=m3dtemp*cneudr(l+1)
         if(iopcs.eq.2) m3dtemp=m3dtemp+m3temp/(xi*x2m1)
         m3dc=m3dtemp*cneun(l+1)/m3bot
@@ -3810,11 +3810,11 @@ end if
 !  compute the ratio a(n=0)/a(n=l) for l even or a(n=1)/a(n=l) for l odd
 !  this ratio has the characteristic a01 and the exponent ia01
         ia01=0
-   	a01=1.0e0_knd
+    a01=1.0e0_knd
         if(l2.eq.0) go to 220
           do 210 kjl=1,l2
           kkjl=l2-kjl+1
-    	  a01=a01/enra(kkjl)
+          a01=a01/enra(kkjl)
           if(abs(a01).gt.dec) go to 210
           a01=a01*decinv
           ia01=ia01-ndec
@@ -4262,14 +4262,14 @@ end if
 !
 !  compute b1(cm,l) or b2(cm,l)
         ib12=0
-   	b12=1.0e0_knd
+        b12=1.0e0_knd
         if(l2.eq.0) go to 220
         kjlupp=l2
         if(ix.eq.0) kjlupp=l2-1
         if(kjlupp.eq.0) go to 220
           do 210 kjl=1,kjlupp
           kkjl=l2-kjl+1
-    	  b12=b12/enrb(kkjl)
+          b12=b12/enrb(kkjl)
           if(abs(b12).gt.dec) go to 210
           b12=b12*decinv
           ib12=ib12-ndec
@@ -5075,7 +5075,7 @@ end if
         end subroutine
 !
 !
-	subroutine gauss (n,ndec,x,w)
+    subroutine gauss (n,ndec,x,w)
 !
 !  purpose:     To evaluate the coordinates and weighting factors
 !               for an nth order Gaussian quadrature
@@ -5098,30 +5098,30 @@ end if
         imax=(n+1)/2
         pi=acos(-1.0e0_knd)
           do 40 i=1,imax
-	  z=cos(pi*(i-0.25e0_knd)/(n+0.5e0_knd))
+      z=cos(pi*(i-0.25e0_knd)/(n+0.5e0_knd))
             do 20 j=1,30
             u=0.0e0_knd
-	    v=1.0e0_knd
-	      do 10 k=1,n
-	      t=u
+        v=1.0e0_knd
+          do 10 k=1,n
+          t=u
               u=v
-	      v=((k+k-1)*z*u-(k-1)*t)/k
-10   	      continue
+          v=((k+k-1)*z*u-(k-1)*t)/k
+10             continue
             s=z*z-1.0e0_knd
-	    der=n*(z*v-u)/s
-	    delta=-v/der-0.5e0_knd*v*v*((n*n*s-n*z*z-n)*v+ &
+        der=n*(z*v-u)/s
+       delta=-v/der-0.5e0_knd*v*v*((n*n*s-n*z*z-n)*v+ &
                    2.0e0_knd*n*z*u)/(der*der*der*s*s)
             z=z+delta
-	    if(abs(delta/z).lt.test) go to 30
+        if(abs(delta/z).lt.test) go to 30
 20          continue
 30        continue
-	  x(i)=-z
-	  x(n+1-i)=z
-	  w(i)=2.0e0_knd/((1.0e0_knd-z*z)*der*der)
-	  w(n+1-i)=w(i)
-40	  continue
-	return
-	end subroutine
+      x(i)=-z
+      x(n+1-i)=z
+      w(i)=2.0e0_knd/((1.0e0_knd-z*z)*der*der)
+      w(n+1-i)=w(i)
+40   continue
+    return
+    end subroutine
 !
 !
         subroutine k0int (cx,ndec,ngau,wr,xr,ck0)

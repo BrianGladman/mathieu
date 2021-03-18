@@ -4,15 +4,15 @@ The Mathieu Subroutiine
 
 Contents
 
-	1. Introduction
-	2. Purpose
-	3. Input Parameters
-	4. Output Parameters
-	5. File Output
-	6. Accuracy Using 64-bit Arithmetic
-	7. Accuracy Using 128-bit Arithmetic
-	8. Expansion Coefficients A and B
-	9. Eigenvalues
+    1. Introduction
+    2. Purpose 
+    3. Input Parameters
+    4. Output Parameters
+    5. File Output
+    6. Accuracy Using 64-bit Arithmetic
+    7. Accuracy Using 128-bit Arithmetic
+    8. Expansion Coefficients A and B
+    9. Eigenvalues
 
 1. Introduction
 ---------------
