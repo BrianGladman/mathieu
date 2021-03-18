@@ -10,7 +10,7 @@ module mathieu
     subroutine matfcn(lnum, ioprad, izxi, icq, isq, qc, r, iopang, narg, arg, &
                             mc1c, mc1e, mc1dc, mc1de, mc23c, mc23e, mc23dc, mc23de, naccrc, &
                             ms1c, ms1e, ms1dc, ms1de, ms23c, ms23e, ms23dc, ms23de, naccrs, &
-			    ce, ced, se, sed, naccra)
+                            ce, ced, se, sed, nacca)
 
     integer, intent (in)    ::  ioprad, izxi, icq, isq, iopang, narg
     real(knd), intent (in)  ::  qc, r, arg(narg)
@@ -121,8 +121,8 @@ module mathieu
                    narg,arg,maxd,maxj,maxlp,maxn,maxp,maxkbp,maxk, &
                    ndec,nex,ngau,kindd,kindq, &
 		   mc1c,mc1e,mc1dc,mc1de,mc23c,mc23e,mc23dc,mc23de,naccrc, &
-		   ms1c,ms1e,ms1dc,ms1de,ms23c,ms23e,ms23dc,ms23de, &
-		   naccrs,ce,ced,se,sed,naccra)
+		   ms1c,ms1e,ms1dc,ms1de,ms23c,ms23e,ms23dc,ms23de,naccrs, &
+		   ce,ced,se,sed,nacca)
         end subroutine
 !
 
@@ -155,7 +155,7 @@ module mathieu
                   narc(lnum),nars(lnum)
 !
 !  real(knd) arrays with dimensions lnum and narg
-        real(knd) ace(lnum,narg),aced(lnum,narg),ase(lnum,narg), ased(lnum,narg)
+        real(knd) ace(lnum,narg),aced(lnum,narg),ase(lnum,narg),ased(lnum,narg)
 !
 !  integer arrays with dimensions lnum and narg
         integer   naa(lnum,narg)
