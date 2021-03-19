@@ -47,5 +47,6 @@
 	<Files>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<File RelativePath="..\matdrv.f90"/>
-		<File RelativePath="..\mathieu.f90"/></Filter></Files>
+		<File RelativePath="..\mathieu.f90"/>
+		<File RelativePath="..\param.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>

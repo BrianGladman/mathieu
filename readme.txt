@@ -4,8 +4,8 @@ The Mathieu Subroutiine
 
 Contents
 
-    1. Introduction
-    2. Purpose 
+    1. Purposse
+    2. Introduction
     3. Input Parameters
     4. Output Parameters
     5. File Output
@@ -14,47 +14,116 @@ Contents
     8. Expansion Coefficients A and B
     9. Eigenvalues
 
-1. Introduction
----------------
 
-Subroutine version of the fortran program matfcn originally developed
-about 2005 by arnie lee van buren and jeffrey boisvert. Updated
-several times since then. For more information see the GitHub
-repository: GitHub.com/MathieuandSpheroidalWaveFunctions/Mathieu
+  1. Purpose
 
-2. Purpose
-----------
+  To calculate the Mathieu radial functions and their first
+  derivatives for a range of lnum orders from l = 0 to l = lnum - 1
+  and for a given value of q [or c=sqrt(2*q)] and the radial
+  coordinate r. The radial coordinate can either be the traditional
+  coordinate z or the spheroidal-like radial coordinate xi = cosh(z).
+  To calculate the Mathieu angular functions and their first derivatives
+  for orders l = 0 to l = lnum - 1 for a given value of q (or c) and
+  for one or more angular coordinate values.
 
-This subroutine computes the Mathieu Anngular and Radial functions
-over a wide range of parameter values over which it is capable of
-producing highly accurate results by using 64 or 128 bit floating
-point arithmetic.
+  2. Introduction
 
-The internal precision used is set the maximum number of decimal
-digits (ndec) and the maximum exponent (nex) available in real
-arithmetic. But the algorithms used and their implemntation allow
-for much larger since the resulting floating point radial function
-values are given as a characteristic and an integer exponent. Tests
-show that with 64 bit arithmetic mathieu provides good results for
-q positive for virtually all values of xi and for c up to at least
-10000. It also provides good results for q negative for virtually
-all values of xi down to 1.000005 and for c up to at least 10000i
-(see the discussion of accuracy below).
+  We use the term radial function for what is normally referred to as
+  a modified Mathieu function. We do this to be consistent with our
+  usage of the term radial function for spheroidal wave functions.
+  The use of what we call the size parameter c instead of the
+  traditional q is consistent with usage for spheroidal functions
+  (see, e.g., Handbook of Mathematical Functions). So is the use of
+  xi = cosh(z) as the radial coordinate. We note that the
+  algebraic form of Mathieu's equation can be obtained from the
+  differential equation for radial prolate spheroidal functions by
+  setting m = 1/2.
 
-Matfcn can be run in either double precision or quadruple precision
-arithmetic. The choice is set in the module param located at the
-beginning of matfcn. Here, the kind parameter knd is set by the
-statement:
+  The first derivative values provided for the radial functions
+  are with respect to the traditional radial coordinate z that ranges
+  from 0 to infinity. First derivatives with respect to the radial
+  coordinate xi can be obtained by multiplying those given by matfcn
+  by the factor 1/sqrt(xi*xi-1). See the comments below about using
+  x1 = xi - 1 as input to matfcn to avoid subtraction errors in forming
+  the expression xi*xi - 1 when xi is near unity. Here xi*xi - 1 is
+  then accurately computed using x1*(x1 + 2).
 
+  The first derivative values provided for the angular functions
+  are with respect to the traditional angle coordinate.
+
+  The methods used in matfcn are documented in the journal article:
+  A. L. Van Buren and J. E. Boisvert, "Accurate calculation of the
+  modified mathieu functions of integer order," Quart. Appl.
+  Math. 65, 1-23 (2007). A pdf version of this article is provided
+  in this repository. [Note that the argument for both cos and sin
+  in the two equations in (10) is in error and should be r times
+  theta.]
+
+  Matfcn is written in free format fortran. It is designed around the
+  maximum number of decimal digits ndec and the maximum exponent nex
+  available in real arithmetic. Procedures used in matfcn allow for
+  exponents much larger than nex since the resulting floating point
+  radial function values are given as a characteristic and an integer
+  exponent. Testing of matfcn shows that in real*8 arithmetic,it provides
+  good results for q positive for virtually all values of xi and for c
+  up to at least 10000. It also provides good results for q negative for
+  virtually all values of xi down to 1.000005 and for c up to at
+  least 10000i. See the discussion of accuracy below.
+
+  Matfcn can be run in either double precision or quadruple precision
+  arithmetic. The choice is set in the module param provided in the github
+  repository. If this is not available, then create param as follows:
+
+    module param
     integer, parameter :: knd = selected_real_kind(8)
+    logical, parameter :: debug = .true.
+    logical, parameter :: warn = .true.
+    logical, parameter :: output = .true.
+    end module param
 
-Set the value of knd in the parenthesis to either 8 for 64 bit
-arithmetic (double precision) or 16 for 128 bit arithmetic
-(quadruple precision). Using quadruple precision will provide
-higher accuracy but will considerably increase the run time.
+  Set the value of knd in the parenthesis to either 8 for double
+  precision or 16 for quadruple precision arithmetic. Using quadruple
+  precision will provide higher accuracy but will considerably increase
+  the run time. Some compilers require that param be compiled prior to
+  rather than after mathieu. The logicals in param are described below
+  in the discussion of the output files.
 
+  Some computers may have more than 8 bytes for double precision
+  data and more than 16 bytes for quadruple precision data. In this
+  case just use the appropriate integers for the kind parameters in
+  module param. Also change the values of kindd and kindq set in
+  statement 5 below below the comments section to the number of
+  bytes for double precision data and quadruple precision data,
+  respectively. Larger values of kindd and kindq will lead to
+  more accurate results, especially for large values of c and small
+  values of x. Note that the mathematical constant gamma is given below
+  to 39 decimal digits. Of course, this will be truncated to the
+  correct precision for the kind parameter used. If matfcn is run
+  with higher precision than this, additional digits will be necessary
+  for gamma in order to ensure the higher accuracy associated with
+  this higher precision.
+
+  Some computer also use values for kind that do not correspond to the
+  number of bytes used in real data, In this case just use the values
+  for kind that correspond to double and quadruple precison arithmetic.
+  This includes setting kindd and kindq to the proper values for double
+  and quadruple precision arithmetic, respectively.
 3. Input Parameters
--------------------
+
+    subroutine matfcn(lnum, ioprad, izxi, icq, isq, qc, r, iopang, narg, arg, &
+                      mc1c, mc1e, mc1dc, mc1de, mc23c, mc23e, mc23dc, mc23de, naccrc, &
+                      ms1c, ms1e, ms1dc, ms1de, ms23c, ms23e, ms23dc, ms23de, naccrs, &
+                      ce, ced, se, sed, nacca)
+
+    integer, intent (in)    ::  ioprad, izxi, icq, isq, iopang, narg
+    real(knd), intent (in)  ::  qc, r, arg(narg)
+    integer, intent (out)   ::  mc1e(lnum),mc1de(lnum),mc23e(lnum),mc23de(lnum), &
+                                ms1e(lnum),ms1de(lnum),ms23e(lnum),ms23de(lnum), &
+                                naccrc(lnum), naccrs(lnum), nacca(lnum, narg)
+    real(knd), intent (out) ::  mc1c(lnum), mc1dc(lnum), mc23c(lnum), mc23dc(lnum), &
+                                ms1c(lnum), ms1dc(lnum), ms23c(lnum), ms23dc(lnum), &
+                                ce(lnum, narg), ced(lnum, narg), &
+                                se(lnum, narg), sed(lnum, narg)
 
           lnum   : number of integer values of l, given by
                    0, 1, 2, ..., lnum-1, that radial and/or
@@ -129,7 +198,6 @@ higher accuracy but will considerably increase the run time.
                    [real(knd)]
 
 4. Output Parameters
----------------------
 
           mc1c   : real(knd) vectors of length lnum containing the
           mc1dc    characteristics for the cosine radial functions
@@ -419,8 +487,7 @@ parameter file at the start of the source code:
      converge, the value of l for which this occurs will be written
      to fort.60. Note that this has never been observed with matfcn.
 
-6. Accuracy Using 64-bit Arithmetic
------------------------------------
+6. Accuracy using 64-bit floating point arithmetic
 
   When c is real (q positive) and xi is not zero, matfcn provides
   values for the radial functions of both the first and second kinds
@@ -523,8 +590,8 @@ parameter file at the start of the source code:
   functions. Note that the angular functions have the same norm pi as
   the corresponding cosine and sine functions.
 
-7. Accuracy Using 128-bit Arithmetic
-------------------------------------
+7. Accuracy using 128-bit floating point arithmetic
+
 
   If the user desires more accuracy than is provided using real*8
   arithmetic, matfcn can be run using real*16 arithmetic. However,
@@ -556,8 +623,8 @@ parameter file at the start of the source code:
   the estimated accuracy falls below a specified number of integer
   digits. See comments below about this file.
 
-8. Expansion Coefficients A and B
----------------------------------
+8. Expansion Coefficients
+
 
   The user may be interested in the expansion coefficients A and B for
   each order l. Both are calculated as vectors containing ratios of
@@ -610,7 +677,7 @@ parameter file at the start of the source code:
   negative and l is odd.
 
 9. Eigenvalues
---------------
+
 
   The eigenvalues for the expansion coefficients A are computed in
   subroutine convera and returned to main where they are stored in the
