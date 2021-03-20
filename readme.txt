@@ -4,16 +4,15 @@ The Mathieu Subroutiine
 
 Contents
 
-    1. Purposse
+    1. Purpose
     2. Introduction
     3. Input Parameters
     4. Output Parameters
     5. File Output
-    6. Accuracy Using 64-bit Arithmetic
-    7. Accuracy Using 128-bit Arithmetic
-    8. Expansion Coefficients A and B
-    9. Eigenvalues
-
+    6. Accuracy of results using real*8 arithmetic
+    7. Accuracy of results using real*16 arithmetic
+    8. Obtaining the A and B expansion coefficients
+    9. Obtaining the eigenvalues
 
   1. Purpose
 
@@ -108,22 +107,23 @@ Contents
   for kind that correspond to double and quadruple precison arithmetic.
   This includes setting kindd and kindq to the proper values for double
   and quadruple precision arithmetic, respectively.
-3. Input Parameters
+  3. Input Parameters
+
 
     subroutine matfcn(lnum, ioprad, izxi, icq, isq, qc, r, iopang, narg, arg, &
                       mc1c, mc1e, mc1dc, mc1de, mc23c, mc23e, mc23dc, mc23de, naccrc, &
                       ms1c, ms1e, ms1dc, ms1de, ms23c, ms23e, ms23dc, ms23de, naccrs, &
                       ce, ced, se, sed, nacca)
 
-    integer, intent (in)    ::  ioprad, izxi, icq, isq, iopang, narg
-    real(knd), intent (in)  ::  qc, r, arg(narg)
-    integer, intent (out)   ::  mc1e(lnum),mc1de(lnum),mc23e(lnum),mc23de(lnum), &
-                                ms1e(lnum),ms1de(lnum),ms23e(lnum),ms23de(lnum), &
-                                naccrc(lnum), naccrs(lnum), nacca(lnum, narg)
-    real(knd), intent (out) ::  mc1c(lnum), mc1dc(lnum), mc23c(lnum), mc23dc(lnum), &
-                                ms1c(lnum), ms1dc(lnum), ms23c(lnum), ms23dc(lnum), &
-                                ce(lnum, narg), ced(lnum, narg), &
-                                se(lnum, narg), sed(lnum, narg)
+        integer, intent (in)    ::  lnum, ioprad, izxi, icq, isq, iopang, narg
+        real(knd), intent (in)  ::  qc, r, arg(narg)
+        integer, intent (out)   ::  mc1e(lnum),mc1de(lnum),mc23e(lnum),mc23de(lnum), &
+                                    ms1e(lnum),ms1de(lnum),ms23e(lnum),ms23de(lnum), &
+                                    naccrc(lnum), naccrs(lnum), nacca(lnum, narg)
+        real(knd), intent (out) ::  mc1c(lnum), mc1dc(lnum), mc23c(lnum), mc23dc(lnum), &
+                                    ms1c(lnum), ms1dc(lnum), ms23c(lnum), ms23dc(lnum), &
+                                    ce(lnum, narg), ced(lnum, narg), &
+                                    se(lnum, narg), sed(lnum, narg)
 
           lnum   : number of integer values of l, given by
                    0, 1, 2, ..., lnum-1, that radial and/or
@@ -197,7 +197,7 @@ Contents
                    degrees for which angular functions are desired
                    [real(knd)]
 
-4. Output Parameters
+  4. Output Parameters
 
           mc1c   : real(knd) vectors of length lnum containing the
           mc1dc    characteristics for the cosine radial functions
@@ -226,7 +226,10 @@ Contents
                    the characteristics for even orders.
 
           mc23e :  integer vectors of length lnum containing the
-          mc23de   exponents corresponding to dmc23 and dmc23d
+          mc23de   exponents corresponding to mc23 and mc23d
+
+          naccrc : vector of lnum values for the estimated accuracy of the
+                   cosine radial functions; obtained using the Wronskian
 
           ms1c   : real(knd) vectors of length lnum containing the
           ms1dc    characteristics for the sine radial functions
@@ -255,30 +258,32 @@ Contents
                    the characteristics for even orders.
 
           mc23e  : integer vectors of length lnum containing the
-          mc23de   exponents corresponding to dms23 and dms23d
+          mc23de   exponents corresponding to ms23 and ms23d
 
-          ce,ced : vectors ce(lnum,narg) and ced(lnum,narg) that
+          naccrs : vector of lnum values for the estimated accuracy of the
+                   sine radial functions; obtained using the Wronskian
+
+          ce,ced : arrays ce(lnum,narg) and ced(lnum,narg) that
                    contain narg calculated angular cosine functions
                    and their first derivatives for each of the lnum
                    values of l [real(knd)]
                    For example, ce(10,1) is the angular function for
                    l = 9 and the first value of the angle phi given
                    by arg(1)
-          se,sed : vectors se(lnum,narg) and sed(lnum,narg) that
+
+          se,sed : arrays se(lnum,narg) and sed(lnum,narg) that
                    contain narg calculated angular sine functions
                    and their first derivatives for each of the lnum
                    values of l [real(knd))
                    For example, se(10,1) is the angular function for
                    l = 9 and the first value of the angle phi given
                    by arg(1)
-          naccrc : estimated accuracy of the cosine radial functions;
-                   obtained using the Wronskian
-          naccrs : estimated accuracy of the sine radial functions;
-                   obtained using the Wronskian
-          nacca  : estimated accuracy of the angular functions; equal
-                   to the minimum of the estimates for the sine and
-                   cosine angular functions and their first derivatives;
-                   based on subtraction errors in their calculation
+
+          nacca  : array of lnum values for the estimated accuracy of the angular
+                   functions for each of the narg angles; it is equal to the
+                   minimum of the estimates for the sine and cosine angular
+                   functions and their first derivatives; it is based on
+                   subtraction errors in their calculation
 
 The radial functions are those normally referred to as modified
 Mathieu functions. This terminology is used for consistency with
@@ -487,7 +492,8 @@ parameter file at the start of the source code:
      converge, the value of l for which this occurs will be written
      to fort.60. Note that this has never been observed with matfcn.
 
-6. Accuracy using 64-bit floating point arithmetic
+
+  6. Accuracy of Results Using Real*8 Arithmetic
 
   When c is real (q positive) and xi is not zero, matfcn provides
   values for the radial functions of both the first and second kinds
@@ -590,8 +596,7 @@ parameter file at the start of the source code:
   functions. Note that the angular functions have the same norm pi as
   the corresponding cosine and sine functions.
 
-7. Accuracy using 128-bit floating point arithmetic
-
+  7. Accuracy of Results Using Real*16 Arithmetic
 
   If the user desires more accuracy than is provided using real*8
   arithmetic, matfcn can be run using real*16 arithmetic. However,
@@ -623,8 +628,7 @@ parameter file at the start of the source code:
   the estimated accuracy falls below a specified number of integer
   digits. See comments below about this file.
 
-8. Expansion Coefficients
-
+  8. Obtaining the expansion coefficients A and B
 
   The user may be interested in the expansion coefficients A and B for
   each order l. Both are calculated as vectors containing ratios of
@@ -676,8 +680,7 @@ parameter file at the start of the source code:
   both q positive and q negative. No interchange is needed when q is
   negative and l is odd.
 
-9. Eigenvalues
-
+  9. Obtaining the eigenvalues
 
   The eigenvalues for the expansion coefficients A are computed in
   subroutine convera and returned to main where they are stored in the
