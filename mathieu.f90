@@ -21,7 +21,6 @@ module mathieu
                                     ms1c(lnum), ms1dc(lnum), ms23c(lnum), ms23dc(lnum), &
                                     ce(lnum, narg), ced(lnum, narg), &
                                     se(lnum, narg), sed(lnum, narg)
-
         real(knd) q, cm, z, x1
 !
 !  ndec: the maximum number of decimal digits available in real(knd)

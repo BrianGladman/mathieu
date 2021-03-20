@@ -1,8 +1,8 @@
 
-The Mathieu Subroutiine
------------------------
+The Mathieu Module
+------------------
 
-Contents
+  Table of Contents
 
     1. Purpose
     2. Introduction
@@ -11,8 +11,8 @@ Contents
     5. File Output
     6. Accuracy of results using real*8 arithmetic
     7. Accuracy of results using real*16 arithmetic
-    8. Obtaining the A and B expansion coefficients
-    9. Obtaining the eigenvalues
+    8. Expansion Coefficients A and B
+    9. Eigenvalues
 
   1. Purpose
 
@@ -107,23 +107,22 @@ Contents
   for kind that correspond to double and quadruple precison arithmetic.
   This includes setting kindd and kindq to the proper values for double
   and quadruple precision arithmetic, respectively.
-  3. Input Parameters
-
+3. Input Parameters
 
     subroutine matfcn(lnum, ioprad, izxi, icq, isq, qc, r, iopang, narg, arg, &
                       mc1c, mc1e, mc1dc, mc1de, mc23c, mc23e, mc23dc, mc23de, naccrc, &
                       ms1c, ms1e, ms1dc, ms1de, ms23c, ms23e, ms23dc, ms23de, naccrs, &
                       ce, ced, se, sed, nacca)
 
-        integer, intent (in)    ::  lnum, ioprad, izxi, icq, isq, iopang, narg
-        real(knd), intent (in)  ::  qc, r, arg(narg)
-        integer, intent (out)   ::  mc1e(lnum),mc1de(lnum),mc23e(lnum),mc23de(lnum), &
-                                    ms1e(lnum),ms1de(lnum),ms23e(lnum),ms23de(lnum), &
-                                    naccrc(lnum), naccrs(lnum), nacca(lnum, narg)
-        real(knd), intent (out) ::  mc1c(lnum), mc1dc(lnum), mc23c(lnum), mc23dc(lnum), &
-                                    ms1c(lnum), ms1dc(lnum), ms23c(lnum), ms23dc(lnum), &
-                                    ce(lnum, narg), ced(lnum, narg), &
-                                    se(lnum, narg), sed(lnum, narg)
+         integer, intent (in)    ::  lnum, ioprad, izxi, icq, isq, iopang, narg
+         real(knd), intent (in)  ::  qc, r, arg(narg)
+         integer, intent (out)   ::  mc1e(lnum), mc1de(lnum), mc23e(lnum), mc23de(lnum), &
+                                     ms1e(lnum), ms1de(lnum), ms23e(lnum), ms23de(lnum), &
+                                     naccrc(lnum), naccrs(lnum), nacca(lnum, narg)
+         real(knd), intent (out) ::  mc1c(lnum), mc1dc(lnum), mc23c(lnum), mc23dc(lnum), &
+                                     ms1c(lnum), ms1dc(lnum), ms23c(lnum), ms23dc(lnum), &
+                                     ce(lnum, narg), ced(lnum, narg), &
+                                     se(lnum, narg), sed(lnum, narg)
 
           lnum   : number of integer values of l, given by
                    0, 1, 2, ..., lnum-1, that radial and/or
@@ -197,7 +196,7 @@ Contents
                    degrees for which angular functions are desired
                    [real(knd)]
 
-  4. Output Parameters
+4. Output Parameters
 
           mc1c   : real(knd) vectors of length lnum containing the
           mc1dc    characteristics for the cosine radial functions
@@ -598,6 +597,7 @@ parameter file at the start of the source code:
 
   7. Accuracy of Results Using Real*16 Arithmetic
 
+
   If the user desires more accuracy than is provided using real*8
   arithmetic, matfcn can be run using real*16 arithmetic. However,
   the execution time increases considerably. Matfcn computes results
@@ -628,7 +628,8 @@ parameter file at the start of the source code:
   the estimated accuracy falls below a specified number of integer
   digits. See comments below about this file.
 
-  8. Obtaining the expansion coefficients A and B
+8. Expansion Coefficients A and B
+
 
   The user may be interested in the expansion coefficients A and B for
   each order l. Both are calculated as vectors containing ratios of
@@ -680,7 +681,8 @@ parameter file at the start of the source code:
   both q positive and q negative. No interchange is needed when q is
   negative and l is odd.
 
-  9. Obtaining the eigenvalues
+9. Eigenvalues
+
 
   The eigenvalues for the expansion coefficients A are computed in
   subroutine convera and returned to main where they are stored in the
