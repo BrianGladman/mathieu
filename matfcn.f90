@@ -1,4 +1,12 @@
-       program matfcn
+
+module param
+    integer, parameter :: knd = selected_real_kind(8)
+    logical, parameter :: debug = .true.
+    logical, parameter :: warn = .true.
+    logical, parameter :: output = .true.
+end module param
+
+program matfcn
        use param
 !
 !      version 1.08 March 2021
