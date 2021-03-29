@@ -1,6 +1,6 @@
 
 module param
-    integer, parameter :: knd = selected_real_kind(8)
+    integer, parameter :: knd = selected_real_kind(16)
     logical, parameter :: debug = .true.
     logical, parameter :: warn = .true.
     logical, parameter :: output = .true.
@@ -708,10 +708,10 @@ end if
 if (debug) then
             if(x1.ne.0.0e0_knd) write(40,150)
 150         format(1x,'m1 calculation using series of Bessel functions', &
-                   ' with argument cm*sqrt(xi*xi-1)')
+                   ' with argument cm * sqrt(xi * xi - 1)')
             if(x1.eq.0.0e0_knd) write(40,155)
 155         format(1x,'m1 equal to nonzero term (if any) in series of', &
-                   ' Bessel functions with argument cm*sqrt(xi*xi-1)')
+                   ' Bessel functions with argument cm * sqrt(xi * xi - 1)')
 end if
             if(iopbes.eq.1) limr1=l+4*ndec+int(cm)+100
             if(iopbes.eq.2) limr1=jbesa+jbesa+20+cm/25
@@ -1887,17 +1887,17 @@ end if
         nsubcs=max(nsub,nsubd)
 if (debug) then
         if(iopcs.eq.1.and.iflag.eq.0) write(40,180) jbes,lim,nsubcs
-180     format(3x,'mc1/mc1d numerator converged in ',i5,' terms; ',i5, &
+180     format(3x,'mc1 / mc1d numerator converged in ',i5,' terms; ',i5, &
                ' available; sub. error = ',i3,' digits.')
         if(iopcs.eq.2.and.iflag.eq.0) write(40,190) jbes,lim,nsubcs
-190     format(3x,'ms1/ms1d numerator converged in ',i5,' terms; ',i5, &
+190     format(3x,'ms1 / ms1d numerator converged in ',i5,' terms; ',i5, &
                ' available; sub. error = ',i3,' digits.')
         if(iopcs.eq.1.and.iflag.eq.1) write(40,200) jbes,lim,nsubcs
-200     format(3x,'mc1/mc1d numerator converged in ',i5,' terms; ',i5, &
+200     format(3x,'mc1 / mc1d numerator converged in ',i5,' terms; ',i5, &
                ' available; fwd series not used; sub. error = ',i3, &
                ' digits.')
         if(iopcs.eq.2.and.iflag.eq.1) write(40,210) jbes,lim,nsubcs
-210     format(3x,'ms1/ms1d numerator converged in ',i5,' terms; ',i5, &
+210     format(3x,'ms1 / ms1d numerator converged in ',i5,' terms; ',i5, &
                ' available; fwd series not used; sub. error = ',i3, &
                ' digits.')
 end if
@@ -2352,10 +2352,10 @@ end if
         if(m1dtemp.eq.0.0e0_knd.and.m1dpos.ne.0.0e0_knd) nsubd=ndec
 if (debug) then
         if(iopcs.eq.1) write(40,150) jbpe,lim,nsub,nsubd,is
-150     format(3x,'mc1/mc1d converged in ',i5,' of ',i5,' terms;', &
+150     format(3x,'mc1 / mc1d converged in ',i5,' of ',i5,' terms;', &
                ' sub. errors =',i3,' and',i3,' digits. s = ',i6)
         if(iopcs.eq.2) write(40,160) jbpe,lim,nsub,nsubd,is
-160     format(3x,'ms1/ms1d converged in ',i5,' of ',i5,' terms;', &
+160     format(3x,'ms1 / ms1d converged in ',i5,' of ',i5,' terms;', &
                ' sub. errors =',i3,' and',i3,' digits. s = ',i6)
 end if
           if(nsub.ne.0.or.nsubd.ne.0) then
@@ -3102,10 +3102,10 @@ end if
         if(m2dtemp.eq.0.0e0_knd.and.m2dpos.ne.0.0e0_knd) nsubd=ndec
 if (debug) then
         if(iopcs.eq.1) write(40,180) jbpe,lim,nsub,nsubd,is
-180     format(3x,'mc2/mc2d converged in ',i5,' of ',i5,' terms;', &
+180     format(3x,'mc2 / mc2d converged in ',i5,' of ',i5,' terms;', &
                ' sub. errors =',i3,' and',i3,' digits. s = ',i6)
         if(iopcs.eq.2) write(40,190) jbpe,lim,nsub,nsubd,is
-190     format(3x,'ms2/ms2d converged in ',i5,' of ',i5,' terms;', &
+190     format(3x,'ms2 / ms2d converged in ',i5,' of ',i5,' terms;', &
                ' sub. errors =',i3,' and',i3,' digits. s = ',i6)
 end if
         iss=is

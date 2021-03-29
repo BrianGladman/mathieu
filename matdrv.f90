@@ -1,32 +1,37 @@
-
-program main
+program matdrv
     use param
     use mathieu
+    
     implicit none
     integer   ndec, i, j, k, l, nex, kindd, kindq, icq, isq, minacc, narg, &
               lnum, izxi, ioprad, iopang, max, maxd, maxj, maxk, maxn, maxp, &
               maxterm, maxbp, maxkbp, maxlp, ismax
     real(knd) cm, q, arg1, darg, r, x1, z, xi
-    real(knd), dimension(:), allocatable :: arg
 
-!   real arrays with dimension lnum
-    real(knd), dimension(:), allocatable :: mc1c,mc1dc,mc23c,mc23dc, &
-                                            ms1c,ms1dc,ms23c,ms23dc
-!   integer arrays with dimension lnum
-    integer, dimension(:), allocatable ::   mc1e,mc1de,mc23e,mc23de, &
-                                            ms1e,ms1de,ms23e,ms23de, &
-                                            acc_rc, acc_rs
-    integer, dimension(:,:), allocatable :: acc_acs
-
-    !   real arrays with dimensions lnum and narg
-    real(knd), dimension (:,:), allocatable :: ce,ced,se,sed
+    real(knd), dimension(:), allocatable ::     arg
+    real(knd), dimension(:), allocatable ::     mc1c, mc1dc, mc23c, mc23dc, &
+                                                ms1c, ms1dc, ms23c, ms23dc
+    integer, dimension(:), allocatable ::       mc1e, mc1de, mc23e, mc23de, &
+                                                ms1e, ms1de, ms23e, ms23de, &
+                                                acc_rc, acc_rs
+    integer, dimension(:,:), allocatable ::     acc_acs
+    real(knd), dimension (:,:), allocatable ::  ce, ced, se, sed
+    character (len = 9)   kstr, fstr, astr
+    character (len = 256) tstr
 
     ndec = precision(cm)
     nex = range(cm) - 1
-    kindd = 8
-    kindq = 16
-    if(knd == kindd) minacc=10
-    if(knd == kindq) minacc=15
+    
+    select case (knd)
+    case (8)
+        kstr = "e24.15"
+        fstr = "f17.14"
+        minacc = 10
+    case (16)
+        kstr = "e24.15"   ! should be "e40.31"   
+        fstr = "f17.14"   ! should be "f33.30"
+        minacc = 15
+    end select
 
 !   open input and output files
 
@@ -39,7 +44,7 @@ program main
     if (icq == 1) read(1,*) q
     if (icq == 2) read(1,*) cm
     read(1, *) r
-    if (iopang  /=  0) read(1, *) arg1, darg, narg
+    if (iopang /= 0) read(1, *) arg1, darg, narg
 
     select case (icq)
     case (1)
@@ -103,44 +108,24 @@ program main
 
     xi = x1 + 1.0e0_knd
 
-    if(izxi == 1) then
-        if(ioprad /= 0.and.knd == kindd) write(20,15) z
-        if(ioprad /= 0.and.knd == kindq) write(20,20) z
-15      format(1x,' z = ',e24.15)
-20      format(1x,' z = ',e40.31)
-    end if
+    if(ioprad /= 0 .and. izxi == 1) write(20, "(1x,' z = '," // kstr // ")") z
 
-    if(izxi == 2) then
-        if(ioprad /= 0.and.knd == kindd) write(20,25) xi
-        if(ioprad /= 0.and.knd == kindq) write(20,30) xi
-25      format(1x,'xi = ',e24.15)
-30      format(1x,'xi = ',e40.31)
-    end if
+    if(ioprad /= 0 .and. izxi == 2) write(20, "(1x,'xi = '," // kstr // ")") xi
 
     if(icq == 1) then
-        if(ioprad /= 0.and.knd == kindd) write(20,35) q
-        if(ioprad /= 0.and.knd == kindq) write(20,40) q
-        if(iopang /= 0.and.knd == kindd) write(30,35) q
-        if(iopang /= 0.and.knd == kindq) write(30,40) q
-35      format(1x,' q = ',e24.15)
-40      format(1x,' q = ',e40.31)
+        if (ioprad /= 0) write(20, "(1x,' q = '," // kstr // ")") q
+        if (iopang /= 0) write(30, "(1x,' q = '," // kstr // ")") q
     end if
 
     if(icq == 2) then
-        if(ioprad /= 0.and.isq == 1.and.knd == kindd) write(20,45) cm
-        if(ioprad /= 0.and.isq == 1.and.knd == kindq) write(20,50) cm
-        if(ioprad /= 0.and.isq == -1.and.knd == kindd) write(20,55) cm
-        if(ioprad /= 0.and.isq == -1.and.knd == kindq) write(20,60) cm
-
-        if(iopang /= 0.and.isq == 1.and.knd == kindd) write(30,45) cm
-        if(iopang /= 0.and.isq == -1.and.knd == kindd) write(30,50) cm
-        if(iopang /= 0.and.isq == 1.and.knd == kindq) write(30,45) cm
-        if(iopang /= 0.and.isq == -1.and.knd == kindq) write(30,55) cm
-
-45      format(1x,' c = ',e24.15)
-50      format(1x,' c = ',e40.31)
-55      format(1x,' c = i times',e24.15)
-60      format(1x,' c = i times',e40.31)
+        if (ioprad /= 0) then
+            if (isq == 1)  write(20, "(1x,' c = '," // kstr // ")") cm
+            if (isq == -1) write(20, "(1x,' c = i times'," // kstr // ")") cm
+        end if
+        if (iopang /= 0) then
+            if (isq == 1)  write(30, "(1x,' c = '," // kstr // ")") cm
+            if (isq == -1) write(30, "(1x,' c = i times'," // kstr // ")") cm
+        end if
     end if
 
     allocate (arg(narg), acc_rc(lnum), acc_rs(lnum), acc_acs(lnum, narg))
@@ -169,25 +154,25 @@ program main
 70      format(1x,'l = ',i6)
 
         if(isq /= -1) then
-            write(20,75) l,mc1c(i),mc1e(i),mc1dc(i),mc1de(i),mc23c(i),mc23e(i),mc23dc(i),mc23de(i),acc_rc(i)
-            if(l > 0) write(20,80) ms1c(i),ms1e(i),ms1dc(i),ms1de(i),ms23c(i),ms23e(i),ms23dc(i),ms23de(i),acc_rs(i)
-75          format(1x,i5,2x,4(f17.14,i6,2x), i2)
-80          format(8x,4(f17.14,i6,2x), i2)
+            tstr = "(1x,i5,2x,4(" // fstr // ",i6,2x), i2)"
+            write(20, tstr) l,mc1c(i),mc1e(i),mc1dc(i),mc1de(i),mc23c(i),mc23e(i),mc23dc(i),mc23de(i),acc_rc(i)
+            tstr = "(8x,4(" // fstr // ",i6,2x), i2)"
+            if(l > 0) write(20, tstr) ms1c(i),ms1e(i),ms1dc(i),ms1de(i),ms23c(i),ms23e(i),ms23dc(i),ms23de(i),acc_rs(i)
         else
-            write(20,85) l,mc1c(i),mc1e(i),mc1dc(i),mc1de(i),mc23c(i),mc23e(i),mc23dc(i),mc23de(i),acc_rc(i)
-            if(l > 0) write(20,85) ms1c(i),ms1e(i),ms1dc(i),ms1de(i),ms23c(i),ms23e(i),ms23dc(i),ms23de(i),acc_rs(i)
-85          format(1x,i5,2x,4(f17.14,i7,2x), i2)
-90          format(8x,4(f17.14,i7,2x), i2)
+            tstr = "(1x,i5,2x,4(" // fstr // ",i7,2x), i2)"
+            write(20, tstr) l,mc1c(i),mc1e(i),mc1dc(i),mc1de(i),mc23c(i),mc23e(i),mc23dc(i),mc23de(i),acc_rc(i)
+            tstr = "(8x,4(" // fstr // ",i7,2x), i2)"
+            if(l > 0) write(20, tstr) ms1c(i),ms1e(i),ms1dc(i),ms1de(i),ms23c(i),ms23e(i),ms23dc(i),ms23de(i),acc_rs(i)
         end if
 
        do k = 1,narg
             if(iopang == 1) then
-                write(30,95) arg(k),ce(i,k),se(i,k), acc_acs(i,k)
+                tstr = "(4x," // fstr // ",5x," // kstr // ",2x," // kstr // ",2x,i2)"
+                write(30, tstr) arg(k),ce(i,k),se(i,k), acc_acs(i,k)
             else if(iopang == 2) then
-                write(30,100) arg(k),ce(i,k),ced(i,k),se(i,k),sed(i,k), acc_acs(i,k)
+                tstr = "(4x," // fstr // ",5x," // kstr // ",2x," // kstr // ",2x,/,26x," // kstr // ",2x," // kstr // ",2x,i2)"
+                write(30, tstr) arg(k),ce(i,k),ced(i,k),se(i,k),sed(i,k), acc_acs(i,k)                
             endif
-95          format(1x,f20.14,5x,e24.15,2x,e24.15,2x,i2)
-100         format(1x,f20.14,5x,e24.15,2x,e24.15,2x,/,26x,e24.15,2x,e24.15,2x,i2)
         end do
     end do
 
@@ -199,4 +184,4 @@ program main
     close(20)
     close(1)
 
-end program main
+end program matdrv
