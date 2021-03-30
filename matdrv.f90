@@ -22,16 +22,9 @@ program matdrv
     ndec = precision(cm)
     nex = range(cm) - 1
     
-    select case (knd)
-    case (8)
-        kstr = "e24.15"
-        fstr = "f17.14"
-        minacc = 10
-    case (16)
-        kstr = "e24.15"   ! should be "e40.31"   
-        fstr = "f17.14"   ! should be "f33.30"
-        minacc = 15
-    end select
+    kstr = "e24.15"
+    fstr = "f17.14"
+    astr = "e40.31" 
 
 !   open input and output files
 
@@ -110,7 +103,7 @@ program matdrv
 
     if(ioprad /= 0 .and. izxi == 1) write(20, "(1x,' z = '," // kstr // ")") z
 
-    if(ioprad /= 0 .and. izxi == 2) write(20, "(1x,'xi = '," // kstr // ")") xi
+    if(ioprad /= 0 .and. izxi == 2) write(20, "(1x,'xi = '," // astr // ")") xi
 
     if(icq == 1) then
         if (ioprad /= 0) write(20, "(1x,' q = '," // kstr // ")") q
@@ -119,11 +112,11 @@ program matdrv
 
     if(icq == 2) then
         if (ioprad /= 0) then
-            if (isq == 1)  write(20, "(1x,' c = '," // kstr // ")") cm
-            if (isq == -1) write(20, "(1x,' c = i times'," // kstr // ")") cm
+            if (isq == 1)  write(20, "(1x,' c = '," // astr // ")") cm
+            if (isq == -1) write(20, "(1x,' c = i times'," // astr // ")") cm
         end if
         if (iopang /= 0) then
-            if (isq == 1)  write(30, "(1x,' c = '," // kstr // ")") cm
+            if (isq == 1)  write(30, "(1x,' c = '," // astr // ")") cm
             if (isq == -1) write(30, "(1x,' c = i times'," // kstr // ")") cm
         end if
     end if

@@ -38,7 +38,7 @@ module mathieu
         kindd = 8
         kindq = 16
 
-        ! set the minimum desired accuray minacc to 10 for real * 8 arithmetic and to 15
+        ! set the minimum desired accuracy minacc to 10 for real * 8 arithmetic and to 15
         ! for real * 16 arithmetic. Minacc for real * 16 can be changed if desired. See
         ! comments above about changing minacc
         if(knd == kindd) minacc = 10
@@ -129,7 +129,7 @@ module mathieu
                             nex, ngau, kindd, kindq, &
                             mc1c, mc1e, mc1dc, mc1de, mc23c, mc23e, mc23dc, mc23de, naccrc, &
                             ms1c, ms1e, ms1dc, ms1de, ms23c, ms23e, ms23dc, ms23de, naccrs, &
-                            ace, aced, ase, ased, nacca)
+                            ce, ced, se, sed, nacca)
         use param
 
         real(knd) api, a01, asubl, b12, bsubl, cm, cepio2, cedpio2, ce0, dec, &
@@ -147,7 +147,7 @@ module mathieu
                   ms1e(lnum), ms1de(lnum), ms23e(lnum), ms23de(lnum), &
                   naccrc(lnum), naccrs(lnum)
 
-        real(knd) ace(lnum, narg), aced(lnum, narg), ase(lnum, narg), ased(lnum, narg)
+        real(knd) ce(lnum, narg), ced(lnum, narg), se(lnum, narg), sed(lnum, narg)
         integer   nacca(lnum, narg)
         real(knd) enra(maxd), blista(maxd), glista(maxd), enrb(maxd), &
                   blistb(maxd), glistb(maxd)
@@ -163,8 +163,8 @@ module mathieu
         real(knd) cneudf3(maxkbp), cneuf3(maxkbp), cneudr3(maxkbp)
         real(knd) cosi(narg, maxp), sine(narg, maxp)
         integer   naccc(narg), naccs(narg)
-        real(knd) arg(narg), barg(narg), ce(narg), ced(narg), &
-                  se(narg), sed(narg)
+        real(knd) arg(narg), barg(narg), ce_(narg), ced_(narg), &
+                  se_(narg), sed_(narg)
         real(knd) xr(ngau), wr(ngau)
         character (len = 9) kstr, fstr
         character (len = 256) tstr
@@ -193,9 +193,6 @@ module mathieu
             limsc = 2 * (lnum + cm + 2 * ndec + 50)
             call sincos (limsc, maxp, narg, isq, barg, sine, cosi)
         end if
-
-        if (knd == kindd) kstr = "e24.15"
-        if (knd == kindq) kstr = "e40.31"
 
         if (ioprad /= 0) then
             if(izxi == 1) then
@@ -449,7 +446,6 @@ module mathieu
                 r1_code: if(iopbes /= 0) then
                     ! calculation of m1 using a series of cylindrical Bessel functions
                     ! of the first kind with argument c * sqrt(xi * xi - 1)
-
                         if (debug) then
                         tstr = "(1x,'m1 calculation using series of Bessel functions with argument cm * sqrt(xi * xi - 1)')"
                         if(x1 /= 0.0e0_knd) write(40, tstr)
@@ -567,7 +563,6 @@ module mathieu
 
                     ! calculation of m2 (q positive) or m3 (q negative) using a series of
                     ! products of cylindrical Bessel functions of the first and second kinds
-
 
                     if (debug) then
                         if(isq == 1)  write(40, "(1x,'m2 calculation using Bessel product series')")
@@ -869,43 +864,43 @@ module mathieu
             end if r_code
 
             a_code: if(iopang /= 0) then
-!               determine Mathieu angular functions of the first kind
+                ! determine Mathieu angular functions of the first kind
 
                 lims1 = 4 + ndec + 2 * int(cm) + 100
                 if(l /= 0) lims1 = jang + jang + 20 + cm / 25
                 if(lims1 > maxp) lims1 = maxp
                 call cese(cm, isq, l, lims1, ndec, iopang, maxd, maxp, enra, enrb, &
-                          sgna, sgnb, narg, cosi, sine, ce, ced, se, sed, naccc, &
+                          sgna, sgnb, narg, cosi, sine, ce_, ced_, se_, sed_, naccc, &
                           naccs, jangc, jangs, asubl, bsubl)
                 jang = max(jangc, jangs)
                 a_loop: do jarg = 1, narg
                     nacca_ = min(naccc(jarg), naccs(jarg))
                     if (output) then
                         tstr = "(1x, f20.14, 5x, " // kstr // ", 2x, " // kstr // ", 2x, i2)"
-                        if(iopang == 1) write(30, tstr) arg(jarg), ce(jarg), se(jarg), nacca_
+                        if(iopang == 1) write(30, tstr) arg(jarg), ce_(jarg), se_(jarg), nacca_
                         tstr = "(1x, f20.14, 5x, " // ", 2x, " // kstr // ", 2x,/,26x, " &
                                     // kstr // ", 2x, " // kstr // ", 2x, i2)"
-                        if(iopang == 2) write(30, tstr) arg(jarg), ce(jarg), ced(jarg), se(jarg), sed(jarg), nacca_
+                        if(iopang == 2) write(30, tstr) arg(jarg), ce_(jarg), ced_(jarg), se_(jarg), sed_(jarg), nacca_
                     end if
                     if(iopang == 1) then
-                        ace(li, jarg) = ce(jarg)
-                        ase(li, jarg) = se(jarg)
+                        ce(li, jarg) = ce_(jarg)
+                        se(li, jarg) = se_(jarg)
                     end if
                     if(iopang == 2) then
-                        ace(li, jarg) = ce(jarg)
-                        aced(li, jarg) = ced(jarg)
-                        ase(li, jarg) = se(jarg)
-                        ased(li, jarg) = sed(jarg)
+                        ce(li, jarg) = ce_(jarg)
+                        ced(li, jarg) = ced_(jarg)
+                        se(li, jarg) = se_(jarg)
+                        sed(li, jarg) = sed_(jarg)
                     end if
                     nacca(li, jarg) = nacca_
 
                     if (debug) then
 
                         tstr = "(5x, f20.14,' degrees',/,10x,'ce = ', " // kstr // ", 2x,' se = '," // kstr // ")"
-                        if(iopang == 1) write(50, tstr) arg(jarg), ce(jarg), se(jarg)
+                        if(iopang == 1) write(50, tstr) arg(jarg), ce_(jarg), se_(jarg)
                         tstr = "(5x, f20.14,' degrees',/,10x,'ce = '," // kstr // ", 2x, ' ced = '," // kstr &
                                     // ",/,10x,'se = '," // kstr // ", 2x, ' sed = '," // kstr // ")"
-                        if(iopang == 2) write(50, tstr) arg(jarg), ce(jarg), ced(jarg), se(jarg), sed(jarg)
+                        if(iopang == 2) write(50, tstr) arg(jarg), ce_(jarg), ced_(jarg), se_(jarg), sed_(jarg)
                     end if
                 end do a_loop
             end if a_code
