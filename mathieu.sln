@@ -7,8 +7,6 @@ Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "matdrv", "matdrv\matdrv.vfp
 EndProject
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "matfcn", "matfcn\matfcn.vfproj", "{A1252667-E515-433C-BE60-D8A14A1DAEB2}"
 EndProject
-Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "matfcnf", "matfcnf\matfcnf.vfproj", "{4C523D6A-98C5-4E87-ACB2-6330842A5ECA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,14 +31,6 @@ Global
 		{A1252667-E515-433C-BE60-D8A14A1DAEB2}.Release|x64.Build.0 = Release|x64
 		{A1252667-E515-433C-BE60-D8A14A1DAEB2}.Release|x86.ActiveCfg = Release|Win32
 		{A1252667-E515-433C-BE60-D8A14A1DAEB2}.Release|x86.Build.0 = Release|Win32
-		{4C523D6A-98C5-4E87-ACB2-6330842A5ECA}.Debug|x64.ActiveCfg = Debug|x64
-		{4C523D6A-98C5-4E87-ACB2-6330842A5ECA}.Debug|x64.Build.0 = Debug|x64
-		{4C523D6A-98C5-4E87-ACB2-6330842A5ECA}.Debug|x86.ActiveCfg = Debug|Win32
-		{4C523D6A-98C5-4E87-ACB2-6330842A5ECA}.Debug|x86.Build.0 = Debug|Win32
-		{4C523D6A-98C5-4E87-ACB2-6330842A5ECA}.Release|x64.ActiveCfg = Release|x64
-		{4C523D6A-98C5-4E87-ACB2-6330842A5ECA}.Release|x64.Build.0 = Release|x64
-		{4C523D6A-98C5-4E87-ACB2-6330842A5ECA}.Release|x86.ActiveCfg = Release|Win32
-		{4C523D6A-98C5-4E87-ACB2-6330842A5ECA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
