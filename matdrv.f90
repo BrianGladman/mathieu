@@ -22,9 +22,9 @@ program matdrv
     ndec = precision(cm)
     nex = range(cm) - 1
     
-    kstr = "e24.15"
+    kstr = "e23.14"
     fstr = "f17.14"
-    astr = "e40.31" 
+    astr = "e39.30" 
 
 !   open input and output files
 
