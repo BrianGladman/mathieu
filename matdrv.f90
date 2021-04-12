@@ -16,21 +16,31 @@ program matdrv
                                                 acc_rc, acc_rs
     integer, dimension(:,:), allocatable ::     acc_acs
     real(knd), dimension (:,:), allocatable ::  ce, ced, se, sed
-    character (len = 9)   kstr, fstr, astr
+    character (len = 9) kstr, fstr, astr
     character (len = 256) tstr
 
+    kindd = 8
+    kindq = 16
+
+    if(knd == kindd) then
+        kstr = "e23.14"
+        fstr = "f17.14"
+    else if (knd == kindq) then
+        kstr = "e39.30"
+        fstr = "f17.14"   ! normally "f33.30"
+    end if
+   astr = "e23.14"
+   
     ndec = precision(cm)
     nex = range(cm) - 1
-    
-    kstr = "e23.14"
-    fstr = "f17.14"
-    astr = "e39.30" 
 
 !   open input and output files
-
     open(1, file='matfcn.dat')
     open(20 ,file='fort.20')
     open(30, file='fort.30')
+    open(40 ,file='fort.20')
+    open(50, file='fort.30')
+    open(60, file='fort.30')
 
     read(1, *) lnum, ioprad, iopang, izxi, icq, isq
 
@@ -103,7 +113,7 @@ program matdrv
 
     if(ioprad /= 0 .and. izxi == 1) write(20, "(1x,' z = '," // kstr // ")") z
 
-    if(ioprad /= 0 .and. izxi == 2) write(20, "(1x,'xi = '," // astr // ")") xi
+    if(ioprad /= 0 .and. izxi == 2) write(20, "(1x,'xi = '," // kstr // ")") xi
 
     if(icq == 1) then
         if (ioprad /= 0) write(20, "(1x,' q = '," // kstr // ")") q
@@ -112,11 +122,11 @@ program matdrv
 
     if(icq == 2) then
         if (ioprad /= 0) then
-            if (isq == 1)  write(20, "(1x,' c = '," // astr // ")") cm
-            if (isq == -1) write(20, "(1x,' c = i times'," // astr // ")") cm
+            if (isq == 1)  write(20, "(1x,' c = '," // kstr // ")") cm
+            if (isq == -1) write(20, "(1x,' c = i times'," // kstr // ")") cm
         end if
         if (iopang /= 0) then
-            if (isq == 1)  write(30, "(1x,' c = '," // astr // ")") cm
+            if (isq == 1)  write(30, "(1x,' c = '," // kstr // ")") cm
             if (isq == -1) write(30, "(1x,' c = i times'," // kstr // ")") cm
         end if
     end if
@@ -160,10 +170,10 @@ program matdrv
 
        do k = 1,narg
             if(iopang == 1) then
-                tstr = "(4x," // fstr // ",5x," // kstr // ",2x," // kstr // ",2x,i2)"
+                tstr = "(4x," // fstr // ",5x," // astr // ",2x," // astr // ",2x,i2)"
                 write(30, tstr) arg(k),ce(i,k),se(i,k), acc_acs(i,k)
             else if(iopang == 2) then
-                tstr = "(4x," // fstr // ",5x," // kstr // ",2x," // kstr // ",2x,/,26x," // kstr // ",2x," // kstr // ",2x,i2)"
+                tstr = "(4x," // fstr // ",5x," // astr // ",2x," // astr // ",2x,/,26x," // astr // ",2x," // astr // ",2x,i2)"
                 write(30, tstr) arg(k),ce(i,k),ced(i,k),se(i,k),sed(i,k), acc_acs(i,k)                
             endif
         end do
@@ -173,6 +183,9 @@ program matdrv
     deallocate (mc1e,mc1de,mc23e,mc23de,ms1e,ms1de,ms23e,ms23de)
     deallocate (ce,ced,se,sed)
     deallocate (acc_rc, acc_rs, acc_acs)
+    close(60)
+    close(50)
+    close(40)
     close(30)
     close(20)
     close(1)

@@ -174,7 +174,7 @@ module mathieu
             fstr = "f17.14"
         else if (knd == kindq) then
             kstr = "e39.30"
-            fstr = "f34.31"
+            fstr = "f33.30"
         end if
 
         dec = 10.0e0_knd ** (-ndec - 1)
@@ -545,8 +545,6 @@ module mathieu
 
                 jbp1 = max(jbp1a, jbp1b)
                 if (debug) then
-                    if (knd == kindd) fstr = "f17.14"
-                    if (knd == kindq) fstr = "f34.31"
                     tstr = "(10x,'mc1 = ', " // fstr // ", i8, 5x,'mc1d = '," // fstr // ", i8)"
                     if(isq == 1 .or. (isq == -1 .and. ix == 0)) write(40, tstr) mc1c_, mc1e_, mc1dc_, mc1de_
                     tstr = "(10x,'ms1 = ', " // fstr // ", i8, 5x,'ms1d = '," // fstr // ", i8)"
