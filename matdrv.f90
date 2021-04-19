@@ -1,7 +1,7 @@
 program matdrv
     use param
     use mathieu
-    
+
     implicit none
     integer   ndec, i, j, k, l, nex, kindd, kindq, icq, isq, minacc, narg, &
               lnum, izxi, ioprad, iopang, max, maxd, maxj, maxk, maxn, maxp, &
@@ -30,7 +30,7 @@ program matdrv
         fstr = "f17.14"   ! normally "f33.30"
     end if
    astr = "e23.14"
-   
+
     ndec = precision(cm)
     nex = range(cm) - 1
 
@@ -174,7 +174,7 @@ program matdrv
                 write(30, tstr) arg(k),ce(i,k),se(i,k), acc_acs(i,k)
             else if(iopang == 2) then
                 tstr = "(4x," // fstr // ",5x," // astr // ",2x," // astr // ",2x,/,26x," // astr // ",2x," // astr // ",2x,i2)"
-                write(30, tstr) arg(k),ce(i,k),ced(i,k),se(i,k),sed(i,k), acc_acs(i,k)                
+                write(30, tstr) arg(k),ce(i,k),ced(i,k),se(i,k),sed(i,k), acc_acs(i,k)
             endif
         end do
     end do
