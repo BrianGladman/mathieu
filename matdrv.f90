@@ -29,7 +29,7 @@ program matdrv
         kstr = "e39.30"
         fstr = "f17.14"   ! normally "f33.30"
     end if
-   astr = "e23.14"
+    astr = "e23.14"
 
     ndec = precision(cm)
     nex = range(cm) - 1
