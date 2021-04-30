@@ -31,28 +31,28 @@ module mathieu
                     nsubs1, limbp1a, limbpea, ib12, jtest, jbpea, nsubbpec, nsubc3, iterm, limbpeb, &
                     nsubbpes, nsubs4, jangc, jangs, limn, limneua, limneub, ndig, jtermflag, lims1, nacca_, &
                     mc1e_, mc1de_, ms1e_, ms2e_, ms1de_, ms2de_, mc2e_, mc2de_, mc3e_, mc3de_, ms3e_, ms3de_
-        
+
         real(knd)   q, cm, z, x1_, x1, api, a01, asubl, b12, bsubl, cepio2, cedpio2, ce0, dec, eigaval, &
                     eigbval, eigavalp, eigbvalp, eiga1, eiga2, eiga3, eiga4, eiga5, eigb1, eigb2, eigb3, &
                     eigb4, eigb5, esa, esb, gamma, m1botc, m1bots, m3bot, pi, rl, sed0, sepio2, sedpio2, &
                     sgna, sgnb, wroncc, wroncs, wront, xi, xb, eigval, &
                     mc1c_, mc1dc_, mc2c_, mc2dc_, mc3c_, mc3dc_, ms1c_, ms1dc_, ms2c_, ms2dc_, ms3c_, ms3dc_
-        
+
 
         integer, dimension(:), allocatable   ::   ibese, ibese1, ibese2, ineue, ineue2, ineue3, naccc, naccs
-        
+
         real(knd), dimension(:), allocatable ::   enra, blista, glista, enrb, blistb, glistb, &
                                                   cbesf, cbesf1, cbesf2, cbesdf, cbesdf1, cbesdf2, &
-                                                  cbesdr, cbesdr1, cbesdr2, cbesn, cbesn1, cbesn2, & 
+                                                  cbesdr, cbesdr1, cbesdr2, cbesn, cbesn1, cbesn2, &
                                                   cneun, cneun2, cneun3, cneudf2, cneuf2, cneudr2, &
                                                   cneudf, cneuf, cneudr, cneudf3, cneuf3, cneudr3, &
                                                   barg, xr, wr, ce_, ced_, se_, sed_, eiga, eigb
-            
+
         real(knd), dimension(:,:), allocatable :: cosi, sine
 
         character (len = 9) kstr, fstr
         character (len = 256) tstr
-                
+
         ! ndec: the maximum number of decimal digits available in real(knd) arithmetic.
         ! nex:  the maximum exponent available in real(knd) arithmetic.
         ndec = precision(cm)
@@ -154,7 +154,7 @@ module mathieu
         allocate (cneudf2(maxn), cneuf2(maxn), cneudr2(maxn), cneudf(maxk), cneuf(maxk), cneudr(maxk))
         allocate (cneudf3(maxkbp), cneuf3(maxkbp), cneudr3(maxkbp), barg(narg), xr(ngau), wr(ngau))
         allocate (cosi(narg, maxp), sine(narg, maxp))
-        
+
         if(knd == kindd) then
             kstr = "e23.14"
             fstr = "f17.14"
@@ -889,9 +889,9 @@ module mathieu
                 end do a_loop
             end if a_code
         end do l_loop
-        
+
         deallocate (cosi, sine)
-        deallocate (cneudf3, cneuf3, cneudr3, barg, xr, wr)        
+        deallocate (cneudf3, cneuf3, cneudr3, barg, xr, wr)
         deallocate (cneudf2, cneuf2, cneudr2, cneudf, cneuf, cneudr)
         deallocate (cbesn, cbesn1, cbesn2, cneun, cneun2, cneun3)
         deallocate (cbesf, cbesf1, cbesf2, cbesdf, cbesdf1, cbesdf2, cbesdr, cbesdr1, cbesdr2)
