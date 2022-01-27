@@ -38,9 +38,9 @@ program matdrv
     open(1, file='matfcn.dat')
     open(20 ,file='fort.20')
     open(30, file='fort.30')
-    open(40 ,file='fort.20')
-    open(50, file='fort.30')
-    open(60, file='fort.30')
+    open(40 ,file='fort.40')
+    open(50, file='fort.50')
+    open(60, file='fort.60')
 
     read(1, *) lnum, ioprad, iopang, izxi, icq, isq
 
