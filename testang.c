@@ -49,7 +49,7 @@ void main(void)
             if(rb)
                 b = mathieu_init_qr(type_b, rb, q, s1);
 
-            printf("\norder = %4d, q = %12.6f (a = %25.16e", rb, q, a);
+            printf("\norder (r) = %4d, q = %12.6f (a = %25.16e", rb, q, a);
             if(rb)
                 printf(", b = %25.16e)", b);
             else

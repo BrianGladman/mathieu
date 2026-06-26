@@ -27,8 +27,8 @@ void main(void)
     double 	q, qlo, qhi, qi, *cv, *cvv;
     int 	i, r, rlo, rhi, nq, ty;
     hill_workspace w[1] = { 0, 0, 0};
-    char   *st = { "     (blanch) even              (blanch) odd        "
-                   "       (hill) even                (hill) odd" };
+    char   *st = { "A(q) (blanch) even         B(q) (blanch) odd        "
+                   "A(q)   (hill) even         B(q)   (hill) odd" };
 
     printf("\nInitial and final q values and the increment? "); 
     scanf_s("%lf %lf %lf", &qlo, &qhi, &qi);
@@ -47,7 +47,7 @@ void main(void)
     {
         mathieu_blanch_values(ty, q, rlo, rhi + 1, cv);
         mathieu_hill_values(ty, q, rlo, rhi + 1, cvv, w);
-        printf("\n\nq = %11.2f  %s", q, st);
+        printf("\n\nq = %8.2f     %s", q, st);
 
         for(r = rlo; r <= rhi ; ++r)
         {

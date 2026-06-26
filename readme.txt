@@ -37,3 +37,24 @@ functions used to calculate the radial functions.
 
 All computation is coded in C but a C++ class definition is included for use
 if necessaey.
+
+Test Applications
+
+1. tdtest
+
+This outputs the Mathieu Characteristic values for a range of q and r values. The 
+output is in the form of a table with the first column being the q value, the 
+second and third colums being A(q) and B(q) computed using Blanch's method and
+the the fourth and fifth columns being A(q) and B(q) using Hill's method.
+
+2. testang
+
+For each specified range of orders (r) and range of q values this application
+outputs tables for ce(a, q, x), ce'(a,q,x), se(a,q,x) and se'(a,q,x) where 
+the x value is in degrees.
+
+3. testrad
+
+For each specified range of orders (r) and range of q values this application outputs
+two tables: one for Mc1(r, q, z), Mc1'(r, q, z), Mc2(r, q, z) and Mc2'(r, q, z) and a
+table for Ms1(r, q, z), Ms1'(r, q, z), Ms2(r, q, z) and Ms2'(r, q, z).
